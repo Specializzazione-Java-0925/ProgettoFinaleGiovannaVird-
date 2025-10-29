@@ -3,7 +3,16 @@
 <head th:insert="~{layout::head}"></head>
 <body>
     <nav th:insert="~{layout::navbar}"></nav>
-    
+
+    <div th:if="${param.notAuthorized}">
+        <div class="alert alert-danger">Non autorizzato!</div>
+    </div>
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+     
+    <h1>Benvenuti nella home</h1>
+
     <footer th:insert="~{layout::footer}"></footer>
     <script th:insert="~{layout::scriptBootstrap}"></script>
 </body>
