@@ -23,24 +23,23 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link active" aria-current="page" href="Crea articolo">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="">Link</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
+              Accesso
             </a>
             <ul class="dropdown-menu">
               <li sec:authorize="isAuthenticated"><a class="dropdown-item" href="@{/register}">Register</a></li>
               <li sec:authorize="isAuthenticated"><a class="dropdown-item" href="@{/login}">Login</a></li>
-              <li sec:authorize="isAuthenticated"><hr class="dropdown-divider"></li>
               <li sec:authorize="isAuthenticated"><a class="dropdown-item" href="@{/logout}">Logout</a></li>
             </ul>
           </li>
         </ul>
-        
+        <div>Benvenuto</div>
         <div sec:authorize="isAuthenticated" 
         th:text="|Benvenuto: ${#authentication.principal.fullname}-${#authentication.principal.authorities[0].authority.replace('ROLE_','')}|"
         ></div>
@@ -58,7 +57,7 @@
       <div class="row text-center text-md-left">
         
         <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-          <h5 class="text-uppercase mb-4 font-weight-bold text-info">Nome Azienda</h5>
+          <h5 class="text-uppercase mb-4 font-weight-bold text-info">Chronicle</h5>
           <p>Una breve descrizione della tua missione o slogan aziendale. Bootstrap rende la creazione di layout veloci e reattivi.</p>
         </div>
         

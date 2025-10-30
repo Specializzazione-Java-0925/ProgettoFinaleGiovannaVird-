@@ -2,7 +2,6 @@ package it.chronicle.demo.Services;
 
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -33,7 +32,7 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    @Autowired
+    @Override
     public boolean isEnabled(){
         return true;
     }

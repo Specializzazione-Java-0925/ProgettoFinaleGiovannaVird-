@@ -35,6 +35,12 @@ public class Article {
     @Size(max = 100)
     private String title;
 
+    @Column(nullable = false, length = 100)
+    @NotEmpty
+    @Size(max = 100)
+    private String subtitle;
+
+
     @Column(nullable = false , length = 1000)
     @NotEmpty
     @Size(max = 1000)
