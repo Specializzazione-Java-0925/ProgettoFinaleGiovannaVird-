@@ -16,14 +16,14 @@
   <!-- navbar -->
   <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="@{/}">Chronicle</a>
+      <a class="navbar-brand" th:href="@{/}">Chronicle</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="Crea articolo">Home</a>
+            <a class="nav-link active" aria-current="page" href="">Crea un articolo</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="">Link</a>
@@ -33,16 +33,14 @@
               Accesso
             </a>
             <ul class="dropdown-menu">
-              <li sec:authorize="isAuthenticated"><a class="dropdown-item" href="@{/register}">Register</a></li>
-              <li sec:authorize="isAuthenticated"><a class="dropdown-item" href="@{/login}">Login</a></li>
-              <li sec:authorize="isAuthenticated"><a class="dropdown-item" href="@{/logout}">Logout</a></li>
+              <li sec:authorize="isAuthenticated"><a class="dropdown-item" aria-current="page" th:href="@{/register}">Register</a></li>
+              <li sec:authorize="isAuthenticated"><a class="dropdown-item" aria-current="page" th:href="@{/login}">Login</a></li>
+              <li sec:authorize="isAuthenticated"><a class="dropdown-item" aria-current="page" th:href="@{/logout}">Logout</a></li>
             </ul>
           </li>
         </ul>
-        <div>Benvenuto</div>
         <div sec:authorize="isAuthenticated" 
-        th:text="|Benvenuto: ${#authentication.principal.fullname}-${#authentication.principal.authorities[0].authority.replace('ROLE_','')}|"
-        ></div>
+        th:text="|Benvenuto: ${#authentication.principal.fullname}-${#authentication.principal.authorities[0].authority.replace('ROLE_','')}|"></div>
         <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
           <button class="btn btn-outline-success" type="submit">Search</button>
@@ -96,7 +94,7 @@
         
         <div class="col-md-7 col-lg-8">
           <p class="text-center text-md-left">
-            Copyright &copy; <script>document.write(new Date().getFullYear())</script> 
+            <!-- Copyright &copy; <script>document.write(new Date().getFullYear())</script>  -->
             <a href="#" style="text-decoration: none;">
               <strong class="text-info">Nome Azienda</strong>
             </a>. Tutti i diritti riservati.
@@ -125,6 +123,6 @@
     </div>
   </footer>
   <!-- end footer  -->
-  <script  th:fragment="scriptBootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+   <script th:fragment="bss" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
