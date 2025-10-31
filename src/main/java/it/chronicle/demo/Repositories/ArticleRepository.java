@@ -11,5 +11,5 @@ import it.chronicle.demo.Models.User;
 public interface ArticleRepository extends ListCrudRepository<Article,Long> {
 
     List<Article>findByCategory(Category category);
-    List<User>findByUser(User user);
+    List<Article>findByUser(User user);
 }

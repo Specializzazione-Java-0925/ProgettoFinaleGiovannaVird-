@@ -70,9 +70,12 @@ public class UserServiceImp implements UserService {
          session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
    } catch(AuthenticationException e){
          e.printStackTrace();
-
+   }
    }
 
+   @Override
+   public User find(Long id){
+      return userRepository.findById(id).get();
    }
 
 }

@@ -13,6 +13,25 @@
      
     <h1>Benvenuti nella home</h1>
 
+    <div class="container" th:if="${articles.size() > 0}">
+        <p>gli ultimi articoli</p>
+
+    </div>
+
+    <div th:each="article:${articles}">
+        <img  th:if="${article.image != null }" th:src="${article.image.path}" alt="">
+        <img th:unless="${article.image != null}" src="@{/images/default.jpg}" alt="">
+
+
+        <div>
+            <p th:text="${article.title}"></p>
+            <p th:text="${article.subtitle}"></p>
+            <p th:text="${article.user.username}"></p>
+
+            <a th:href="@{/articles/details/{id}(id=${article.id})}">Leggi</a>
+        </div>
+    </div>
+
     <footer th:insert="~{layout::footer}"></footer>
     <script th:replace="~{layout::bss}"></script>
 </body>

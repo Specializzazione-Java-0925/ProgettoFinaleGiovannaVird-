@@ -29,7 +29,7 @@
   </div>
   <div class="mb-3">
     <label for="category" class="form-label">Categoria</label>
-    <select id="category" th:filed="*{category}" class="form-select">
+    <select id="category" th:field="*{category}" class="form-select">
         <option  th:each="category:${categories}" th:value="${category.id}" th:text="${category.name}"></option>
     </select>
     <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}"></p>
@@ -45,6 +45,6 @@
 </form>
 
     <footer th:insert="~{layout::footer}"></footer>
-    <script th:insert="~{layout::scriptBootstrap}"></script>
+    <script th:insert="~{layout::bss}"></script>
 </body>
 </html>

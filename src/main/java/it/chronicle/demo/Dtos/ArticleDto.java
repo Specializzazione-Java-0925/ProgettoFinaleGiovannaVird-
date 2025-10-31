@@ -3,6 +3,7 @@ package it.chronicle.demo.Dtos;
 import java.time.LocalDate;
 
 import it.chronicle.demo.Models.Category;
+import it.chronicle.demo.Models.Image;
 import it.chronicle.demo.Models.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,6 @@ public class ArticleDto {
     private LocalDate publishDate;
     private User user;
     private Category category;
+    private Image image;
     
 }

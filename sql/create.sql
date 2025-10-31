@@ -35,4 +35,11 @@ CREATE TABLE IF NOT EXISTS users_roles(
     role_id BIGINT,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (role_id) REFERENCES roles(id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS images(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    path VARCHAR(255) NOT NULL,
+    article_id BIGINT,
+    FOREIGN KEY (article_id) REFERENCES articles(id)
+);

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{layout::head}"></head>
+<body>
+    <nav th:insert="~{layout::navbar}"></nav>
+    
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+    
+    <h1 th:text="${article.title}">Titolo</h1>
+    
+    
+    <img th:if="${article.image != null}" th:src="${article.image.path}" alt="">
+    <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="">
+    
+    
+    <p th:text="${article.subtitle}">sottotitolo :</p>
+    
+    
+    <p th:if="${article.category != null}">
+        Categoria:
+        <a th:href="@{/categories/search/{id}(id=${article.category.id})}"
+        th:text="${article.category.name}"></a>
+    </p>
+    
+    <p th:unless="${article.category != null}">
+        Categoria: <em>nessuna</em>
+    </p>
+    
+    
+    <p th:text="${article.publishDate}"> data</p>
+    <a th:href="@{/search/{id}(id=${article.user.id})}"> 
+        <p th:text="${article.user.username}">nome autore :</p>
+    </a>
+    
+    
+    <p th:text="${article.body}"></p>
+    
+    <a href="#" onclick="goBack()">Torna indietro</a> 
+    
+    <footer th:insert="~{layout::footer}"></footer>
+    <script th:insert="~{layout::bss}"></script>
+    <script>
+        function goBack(){
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
