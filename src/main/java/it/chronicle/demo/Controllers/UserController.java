@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import it.chronicle.demo.Dtos.ArticleDto;
 import it.chronicle.demo.Dtos.UserDto;
 import it.chronicle.demo.Models.User;
+import it.chronicle.demo.Repositories.CareerRequestRepository;
 import it.chronicle.demo.Services.ArticleService;
+import it.chronicle.demo.Services.CategoryService;
 import it.chronicle.demo.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,12 +30,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 
+
+
 @Controller
 public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private CareerRequestRepository careerRequestRepository;
+    @Autowired
+    private CategoryService categoryService;
     
     @GetMapping("/")
     public String home(Model viewModel) {
@@ -94,5 +102,13 @@ public class UserController {
         return "article/articles";
     }
     
+    @GetMapping("/admin/dashboard")
+    public String adminDashboard(Model viewmodel) {
+        viewmodel.addAttribute("title", "Richieste ricevute");
+        viewmodel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
+        viewmodel.addAttribute("categories", categoryService.readAll());
+        return "admin/dashboard";
+    }
+
     
 }

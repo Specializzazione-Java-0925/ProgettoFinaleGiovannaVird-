@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{layout::head}"></head>
+<body>
+    <nav th:insert="~{layout::navbar}"></nav>
+
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+     
+    <h1 th:text="${title}">Richiesta di collaborazione</h1>
+
+   <div>
+    <form th:action="@{/operations/career/request/save}" method="POST" th:object="${careerRequest}" enctype="multipart/form-data">
+        <label for="body" class="form-label">Motivo della richiesta:</label>
+        <textarea name="" id="body" class="form-control" th:field="*{body}" placeholder="Inserisci la motivazione"></textarea>
+
+        <div>
+            <label for="role" class="form-label">Per quale ruolo?</label>
+            <select name="" id="role" th:field="*{role}" class="form-select">
+                <option th:each="role:${roles}" th:value="${role.id}" th:text="${#strings.substring(role.name, 5)}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Effettua la richiesta</button>
+    </form>
+   </div>
+
+    <footer th:insert="~{layout::footer}"></footer>
+    <script th:replace="~{layout::bss}"></script>
+</body>
+</html>

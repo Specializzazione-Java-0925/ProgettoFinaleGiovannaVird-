@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{layout::head}"></head>
+<body>
+    <nav th:insert="~{layout::navbar}"></nav>
+
+
+    <div>Richiesta</div>
+
+    <!-- <h2 th:text="${request.user.name}">Nome Utente</h2> -->
+    <p th:text="${request.user.username}">Nome Utente</p>
+    
+    <p th:text="${request.body}">Corpo</p>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                    <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="POST">
+                    <button type="submit" class="btn btn-primary">
+                        Accetta
+                    </button>
+                    <a th:href="@{/admin/dashboard}" class="bnt btn-primary">Torna indietro</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    <footer th:insert="~{layout::footer}"></footer>
+    <script th:replace="~{layout::bss}"></script>
+</body>
+</html>
