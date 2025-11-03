@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.chronicle.demo.Models.Article;
 import it.chronicle.demo.Models.Category;
+import it.chronicle.demo.Repositories.ArticleRepository;
 import it.chronicle.demo.Dtos.ArticleDto;
 import it.chronicle.demo.Dtos.CategoryDto;
 import it.chronicle.demo.Services.ArticleService;
@@ -19,17 +20,18 @@ import it.chronicle.demo.Services.CrudService;
 import jakarta.validation.Valid;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
-
-
-
-
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
@@ -41,14 +43,37 @@ public class ArticleController {
     @Qualifier("categoryService")
     private CrudService<CategoryDto, Category , Long> categoryService;
 
-     @Autowired
+    @Autowired
     private ArticleService articleService;
+    @Autowired
+    private ArticleRepository articleRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @GetMapping("/search/{id}")
+    public String categorySearch(@PathVariable("id") Long id, Model viewModel) {
+        CategoryDto category = categoryService.read(id);
+
+        viewModel.addAttribute("title", "Articoli trovati per categoria" + category.getName());
+
+        List<ArticleDto> articles = articleService.searchByCategory(modelMapper.map(category, Category.class));
+         List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+
+         viewModel.addAttribute("articles", acceptedArticles);
+        return "article/articles";
+    }
+    
+
 
     @GetMapping
     public String articlesIndex(Model viewModel) {
         viewModel.addAttribute("title", "Tutti gli articoli");
 
-        List<ArticleDto> articles = articleService.readAll();
+        // List<ArticleDto> articles = articleService.readAll();
+          List<ArticleDto> articles = new ArrayList<ArticleDto>();
+          for(Article article : articleRepository.findByIsAcceptedTrue()){
+            articles.add(modelMapper.map(article, ArticleDto.class));
+          }
 
         Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
         viewModel.addAttribute("articles", articles);
@@ -94,6 +119,29 @@ public class ArticleController {
             return "article/details";
         }
         
+        @GetMapping("revisor/detail/{id}")
+        public String revisorDetailArticle(@PathVariable("id") Long id, Model viewModel) {
+            viewModel.addAttribute("title", "Dettaglio articolo");
+            viewModel.addAttribute("article", articleService.read(id));
+            return "revisor/detail";
+            
+        }
+        
+        @PostMapping("/accept")
+        public String articleSetAccepted(@RequestParam("action") String action, @RequestParam("articleId") Long articleId, RedirectAttributes redirectAttributes) {
+           if(action.equals("accept")){
+            articleService.setIsAccepted(true, articleId);
+             redirectAttributes.addFlashAttribute("resultMessage", "Articolo accettato");
+           }else if(action.equals("reject")){
+              articleService.setIsAccepted(false, articleId);
+              redirectAttributes.addFlashAttribute("resultMessage", "Articolo rifiutato");
+           }else{
+             redirectAttributes.addFlashAttribute("resultMessage", "Azione non corretta");
+           }
+
+            
+            return "redirect:/revisor/dashboard";
+        }
         
         
     }
