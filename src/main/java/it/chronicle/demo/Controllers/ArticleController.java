@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.repository.query.Param;
 
 import it.chronicle.demo.Models.Article;
 import it.chronicle.demo.Models.Category;
@@ -31,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -142,6 +143,19 @@ public class ArticleController {
             
             return "redirect:/revisor/dashboard";
         }
+
+        @GetMapping("/search")
+        public String articleSearch(@Param("keyword") String keyword, Model viewModel) {
+          viewModel.addAttribute("title","Tutti gli articoli trovati");
+
+          List<ArticleDto> articles = articleService.search(keyword);
+
+          List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+
+          viewModel.addAttribute("articles", acceptedArticles);
+          return "article/articles";
+        }
+        
         
         
     }
