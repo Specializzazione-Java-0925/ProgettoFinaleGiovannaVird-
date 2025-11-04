@@ -86,53 +86,66 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
       return dto;
     }
 
-    @Override
-    public ArticleDto update(Long key, Article updatedArticle, MultipartFile file) {
-        String url= "";
 
-        if(articleRepository.existsById(key)){
-            updatedArticle.setId(key);
-            Article article = articleRepository.findById(key).get();
-            updatedArticle.setUser(article.getUser());
+@Override
+public ArticleDto update(Long key, Article updatedArticle, MultipartFile file) {
 
-            if(!file.isEmpty()){
-              try{
-                imageService.deleteImage(article.getImage().getPath());
-                try{
-                  CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
-                  url = futureUrl.get();
-                }catch(Exception e ){
-                  e.printStackTrace();
-                }
-                imageService.saveImageOnDB(url, updatedArticle);
-                updatedArticle.setIsAccepted(null);
-                return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
-              }catch(Exception e){
-                e.printStackTrace();
-              }
+    Article existingArticle = articleRepository.findById(key)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Articolo id = " + key + " non trovato"));
 
-            }else if(article.getImage() == null){
-              updatedArticle.setIsAccepted(article.getIsAccepted());
-            }else{
-              updatedArticle.setImage(article.getImage());
+    existingArticle.setTitle(updatedArticle.getTitle());
+    existingArticle.setSubtitle(updatedArticle.getSubtitle());
+    existingArticle.setBody(updatedArticle.getBody());
+    existingArticle.setPublishDate(updatedArticle.getPublishDate());
+    existingArticle.setCategory(updatedArticle.getCategory()); 
+    
 
-              if(updatedArticle.equals(article) == false){
-                updatedArticle.setIsAccepted(null);
-              }else{
-                updatedArticle.setIsAccepted(article.getIsAccepted());
-              }
-              return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+
+    if (file != null && !file.isEmpty()) {
+        String url = "";
+        try {
+            if (existingArticle.getImage() != null) {
+                imageService.deleteImage(existingArticle.getImage().getPath());
             }
-        }else{
-          throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+            CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+            url = futureUrl.get();
+            
+            imageService.saveImageOnDB(url, existingArticle);
+            
+            existingArticle.setIsAccepted(null); 
+            
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return null;
+    } 
+    
+
+    if (file == null || file.isEmpty()) {
+        if (existingArticle.equals(updatedArticle) == false) {
+            existingArticle.setIsAccepted(null);
+        }
     }
 
+    return modelMapper.map(articleRepository.save(existingArticle), ArticleDto.class);
+}
+    
     @Override
     public void delete(Long key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+       if(articleRepository.existsById(key)){
+        Article article = articleRepository.findById(key).get();
+
+        try{
+          String path = article.getImage().getPath();
+          article.getImage().setArticle(null);
+          imageService.deleteImage(path);
+        } catch(Exception e){
+          e.printStackTrace();
+        }
+        articleRepository.deleteById(key);
+       }else{
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+       }
     }
     
     public List<ArticleDto> searchByCategory(Category category){

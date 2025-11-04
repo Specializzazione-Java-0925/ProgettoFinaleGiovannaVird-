@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -72,7 +72,6 @@ public class ArticleController {
     public String articlesIndex(Model viewModel) {
         viewModel.addAttribute("title", "Tutti gli articoli");
 
-        // List<ArticleDto> articles = articleService.readAll();
           List<ArticleDto> articles = new ArrayList<ArticleDto>();
           for(Article article : articleRepository.findByIsAcceptedTrue()){
             articles.add(modelMapper.map(article, ArticleDto.class));
@@ -82,7 +81,6 @@ public class ArticleController {
         viewModel.addAttribute("articles", articles);
 
         return "article/articles";
-        
     }
     
     
@@ -108,12 +106,11 @@ public class ArticleController {
                 viewModel.addAttribute("categories", categoryService.readAll());
                 return "article/create";
             }
-
             articleService.create(article, principal, file);
             redirectAttributes.addFlashAttribute("successMessage", "Articolo aggiunto con successo!");
-
             return "redirect:/";
         }
+
 
         @GetMapping("details/{id}")
         public String detailArticle(@PathVariable("id") Long id , Model viwModel ) {
@@ -147,13 +144,16 @@ public class ArticleController {
             viewModel.addAttribute("categories",categoryService.readAll());
             return "article/edit";
            }
-
            articleService.update(id, article, file);
            redirectAttributes.addFlashAttribute("successMessage", "Articolo modificato con successo");
            return "redirect:/articles";
-
-
-           
+        }
+        
+        @GetMapping("/delete/{id}")
+        public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes ) {
+            articleService.delete(id);
+            redirectAttributes.addFlashAttribute("successMessage" , "Articolo eliminato con successo");
+            return "redirect:/writer/dashboard";
         }
         
         
@@ -162,7 +162,6 @@ public class ArticleController {
             viewModel.addAttribute("title", "Dettaglio articolo");
             viewModel.addAttribute("article", articleService.read(id));
             return "revisor/detail";
-            
         }
         
         @PostMapping("/accept")

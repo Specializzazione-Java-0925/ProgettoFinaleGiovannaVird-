@@ -22,7 +22,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="isAuthenticated && hasRole('ROLE_WRITER')">
             <a class="nav-link active" aria-current="page" th:href="@{articles/create}">Crea un articolo</a>
           </li>
            <li class="nav-item">
@@ -45,7 +45,9 @@
                 <span class="badge rounded-pill bg-danger px-1" th:text="${articlesToBeRevised}"></span>
               </div>
             </div>
-
+          </li>
+          <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
+                <a class="nav-link" th:href="@{/writer/dashboard}">Dashboard scrittore</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
