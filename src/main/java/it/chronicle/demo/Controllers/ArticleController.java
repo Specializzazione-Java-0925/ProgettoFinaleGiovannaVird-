@@ -32,6 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -119,6 +121,41 @@ public class ArticleController {
             viwModel.addAttribute("article", articleService.read(id));
             return "article/details";
         }
+
+        @GetMapping("/edit/{id}")
+        public String editArticle(@PathVariable("id") Long  id, Model viewModel) {
+            viewModel.addAttribute("title", "Edita articoli");
+            viewModel.addAttribute("article", articleService.read(id));
+            viewModel.addAttribute("categories", categoryService.readAll());
+            return"article/edit";
+        }
+        
+
+        @PostMapping("/update/{id}")
+        public String articleUpdate(@PathVariable("id") Long id ,
+        @Valid @ModelAttribute("article") Article article,
+        BindingResult result,
+        RedirectAttributes redirectAttributes,
+        Principal principal, 
+        MultipartFile file,
+        Model viewModel) {
+
+           if(result.hasErrors()){
+             viewModel.addAttribute("title", "aggiornamento articolo");
+            article.setImage(articleService.read(id).getImage());
+            viewModel.addAttribute("article", article);
+            viewModel.addAttribute("categories",categoryService.readAll());
+            return "article/edit";
+           }
+
+           articleService.update(id, article, file);
+           redirectAttributes.addFlashAttribute("successMessage", "Articolo modificato con successo");
+           return "redirect:/articles";
+
+
+           
+        }
+        
         
         @GetMapping("revisor/detail/{id}")
         public String revisorDetailArticle(@PathVariable("id") Long id, Model viewModel) {

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{layout::head}"></head>
+<body>
+    <nav th:insert="~{layout::navbar}"></nav>
+
+
+    <div th:if="${resultMessage}" class="alert alert-success">
+        <p th:text="${resultMessage}"></p>
+    </div>
+
+    <div>Dashboard scrittore</div>
+
+    <div>
+        <p th:text="${title}">I tuoi articoli</p>
+    </div>
+
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Titolo</th>
+      <th scope="col">Sottotitolo</th>
+      <th scope="col">Categoria</th>
+      <th scope="col">#Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="article:${articles}">
+      <!-- <th scope="row">1</th> -->
+      <td th:text="${article.id}"></td>
+      <td th:text="${article.title}"></td>
+      <td th:text="${article.subtitle}"></td>
+      <td th:if="${article.category}" th:text="${article.category.name}"></td>
+      <td th:unless="${article.category}">Nessuna categoria</td>
+      <td>
+         <a th:href="@{/articles/details/{id}(id=${article.id})}" class="btn btn-primary">
+            <i class="fa-solid fa-bars"></i>
+        </a>
+        <a th:href="@{/articles/edit/{id}(id=${article.id})}" class="btn btn-warning">
+            <i class="fa-solid fa-pen"></i>
+        </a>
+        <a th:href="@{/articles/delete/{id}(id=${article.id})}" class="btn btn-danger">
+            <i class="fa-solid fa-trash"></i>
+        </a>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+    <footer th:insert="~{layout::footer}"></footer>
+    <script th:replace="~{layout::bss}"></script>
+</body>
+</html>

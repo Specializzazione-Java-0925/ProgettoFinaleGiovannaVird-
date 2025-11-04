@@ -1,5 +1,6 @@
 package it.chronicle.demo.Controllers;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,6 +32,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 @Controller
 public class UserController {
@@ -124,6 +126,19 @@ public class UserController {
         viewModel.addAttribute("title", "Articoli da revisionare");
         viewModel.addAttribute("articles", articleRepository.findByIsAcceptedIsNull());
         return "revisor/dashboard";
+    }
+    
+    @GetMapping("/writer/dashboard")
+    public String writerDashboard(Model viewmodel, Principal principal) {
+        viewmodel.addAttribute("title", "I tuoi articoli");
+
+        List<ArticleDto> userArticles = articleService.readAll()
+                                                      .stream()
+                                                      .filter(article->article.getUser().getEmail().equals(principal.getName()))
+                                                      .toList();
+        viewmodel.addAttribute("articles", userArticles);
+        return "writer/dashboard";
+
     }
     
 
