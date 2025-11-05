@@ -2,42 +2,58 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout::head}"></head>
 <body>
-    <nav th:replace="~{layout::navbar}"></nav>
-
+     <nav th:replace="~{layout::navbar}"></nav>
+   <main>
+    
+    
     <div th:if="${param.notAuthorized}">
         <div class="alert alert-danger">Non autorizzato!</div>
     </div>
     <div th:if="${successMessage}" class="alert alert-success">
         <p th:text="${successMessage}"></p>
     </div>
-
+    
     <div th:if="${errorMessage}" class=" alert alert-success">
-         <p thtext="${errorMessage}"></p>
-    </div>
-     
-    <h1>Benvenuti nella home</h1>
-
-    <div class="container" th:if="${articles.size() > 0}">
-        <p>gli ultimi articoli</p>
-
+        <p thtext="${errorMessage}"></p>
     </div>
 
-    <div th:each="article:${articles}">
-        <img  th:if="${article.image != null }" th:src="${article.image.path}" alt="">
-        <img th:unless="${article.image != null}" src="@{/images/default.jpg}" alt="">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mt-5" th:if="${articles.size() > 0}">
+                <h1 class="text-center" >Gli ultimi articoli</h1>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+    <!-- card -->
+    <div class="container ">
+        <div class="row justify-content-center">
 
+            <div class="col-md-4 mt-5 mb-5 card-custom" th:each="article:${articles}" >
+                <div class="card mx-auto border-0" style="width: 18rem;">
+                    <img class="card-img-top shadow-lg" th:if="${article.image != null }" th:src="${article.image.path}" alt="" style="height: 200px;">
+                     <img class="card-img-top shadow-lg" th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="" style="height: 200px;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${article.title}"></h5>
+                        <p class="card-subtitle" th:text="${article.subtitle}"></p>
+                        <p class="card-text" th:text="${article.user.username}"></p>
+                        <a class="btn btn-warning" th:href="@{/articles/details/{id}(id=${article.id})}">Leggi</a>
+                    </div>
+                </div>
+            </div>
 
-        <div>
-            <p th:text="${article.title}"></p>
-            <p th:text="${article.subtitle}"></p>
-            <p th:text="${article.user.username}"></p>
-
-            <a th:href="@{/articles/details/{id}(id=${article.id})}">Leggi</a>
+            
         </div>
     </div>
-
+    
+    
+    
+   </main>
+   
     <footer th:replace="~{layout::footer}"></footer>
-    <!-- <div th:replace="~{layout::bss}"></div> -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <div th:replace="~{layout::bss}"></div>
+    
 </body>
 </html>

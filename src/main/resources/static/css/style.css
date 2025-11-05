@@ -1,11 +1,13 @@
-a.custom-a{
-    color: white;
+main{
+    height: 100vh;
+    background-image: url(/images/newyork.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.card-custom{
+  transition: transform 0.3s ease-in-out;
 }
 
-a.custom-a:hover {
-    color: white;
-}
-
-a.custom-a.show {
-    color: white !important; 
+.card-custom:hover{
+transform: translateY(-5px);
 }

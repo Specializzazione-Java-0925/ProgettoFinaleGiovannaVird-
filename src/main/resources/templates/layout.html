@@ -10,33 +10,30 @@
   <link rel="stylesheet" th:href="@{./css/style.css}">
 
 </head>
-
-
-
 <!-- end head -->
 
 
 <body>
 
   <!-- navbar -->
-  <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-black shadow-lg py-3">
+  <nav th:fragment="navbar" class="navbar navbar-expand-lg shadow-lg py-3 ">
     <div class="container-fluid">
-      <a class="navbar-brand custom-a" th:href="@{/}">Chronicle</a>
+      <a class="navbar-brand " th:href="@{/}">Chronicle</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item" sec:authorize="isAuthenticated && hasRole('ROLE_WRITER')">
-            <a class="nav-link custom-a" aria-current="page" th:href="@{articles/create}">Crea un articolo</a>
+          <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
+            <a class="nav-link " aria-current="page" th:href="@{articles/create}">Crea un articolo</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link custom-a" aria-current="page" th:href="@{/articles}">Tutti gli articoli</a>
+            <a class="nav-link " aria-current="page" th:href="@{/articles}">Tutti gli articoli</a>
           </li>
           <!-- dash admin -->
           <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="d-flex">
-              <a th:href="@{/admin/dashboard}" class="nav-link custom-a">Dashboard admin</a>
+              <a th:href="@{/admin/dashboard}" class="nav-link ">Dashboard admin</a>
               <div th:if="${careerRequest > 0}">
                 <i class=" fas fa-bell fa-1 pt-2"></i>
                 <span class="badge rounded-pill bg-danger px-1" th:text="${careerRequest}"></span>
@@ -48,7 +45,7 @@
           <!-- dash revisor -->
           <li class="nav-item" sec:authorize="hasAuthority('ROLE_REVISOR')">
             <div class="d-flex">
-              <a th:href="@{/revisor/dashboard}" class="nav-link custom-a">Dashboard revisore</a>
+              <a th:href="@{/revisor/dashboard}" class="nav-link ">Dashboard revisore</a>
               <div class="mt-1" th:if="${articlesToBeRevised > 0 }">
                 <i class="fas fa-bell fa-1 pt-2"></i>
                 <span class="badge rounded-pill bg-danger px-1" th:text="${articlesToBeRevised}"></span>
@@ -59,36 +56,47 @@
 
           <!-- dash writer -->
           <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
-            <a class="nav-link custom-a" th:href="@{/writer/dashboard}">Dashboard scrittore</a>
+            <a class="nav-link " th:href="@{/writer/dashboard}">Dashboard scrittore</a>
           </li>
           <!-- end dash writer -->
+         <!-- dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle " href="#" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">
+            Accesso
+          </a>
+          <ul class="dropdown-menu">
+            <!-- visibili solo a NON autenticati -->
+            <li sec:authorize="isAnonymous()">
+              <a class="dropdown-item" th:href="@{/register}">Register</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+              <a class="dropdown-item" th:href="@{/login}">Login</a>
+            </li>
 
-          <!-- dropdown -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle custom-a" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Accesso
-            </a>
-            <ul class="dropdown-menu">
-              <li sec:authorize="isAuthenticated"><a class="dropdown-item" aria-current="page" th:href="@{/register}">Register</a></li>
-              <li sec:authorize="isAuthenticated"><a class="dropdown-item" aria-current="page" th:href="@{/login}">Login</a></li>
-              <li sec:authorize="isAuthenticated"><a class="dropdown-item" aria-current="page" th:href="@{/logout}">Logout</a></li>
-            </ul>
-          </li>
-          <!-- end dropdown -->
-        </ul>
-        <div sec:authorize="isAuthenticated" 
-        th:text="|Benvenuto: ${#authentication.principal.fullname}-${#authentication.principal.authorities[0].authority.replace('ROLE_','')}|">
+            <!-- separatore + logout per autenticati -->
+            <li><hr class="dropdown-divider" sec:authorize="isAuthenticated()"/></li>
+            <li sec:authorize="isAuthenticated()">
+              <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+            </li>
+          </ul>
+        </li>
+        <!-- end dropdown -->
+      </ul>
+
+      <div sec:authorize="isAuthenticated()"
+           th:text="|Benvenuto: ${#authentication.principal.fullname}-${#authentication.principal.authorities[0].authority.replace('ROLE_','')}|" class="me-4">
       </div>
-      <!-- form -->
-        <form class="d-flex" th:action="@{/articles/search}" method="get">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword"/>
-          <button class="btn btn-warning" type="submit">Search</button>
-        </form>
-        <!-- end form -->
-      </div>
+
+      <form class="d-flex" th:action="@{/articles/search}" method="get">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword"/>
+        <button class="btn btn-warning" type="submit">Search</button>
+      </form>
     </div>
-  </nav>
+  </div>
+</nav>
   <!-- end navbar -->
+   
   <!-- footer -->
   <footer th:fragment="footer" class="bg-black text-white pt-5 pb-4">
     <div class="container text-center text-md-left">
@@ -164,7 +172,7 @@
   </footer>
   <!-- end footer  -->
   <!-- script -->
-  <!-- <script th:fragment="bss" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script> -->
+  <script th:fragment="bss" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
   <!-- endscript -->
 </body>
 </html>
