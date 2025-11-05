@@ -1,3 +1,11 @@
 a.custom-a{
     color: white;
 }
+
+a.custom-a:hover {
+    color: white;
+}
+
+a.custom-a.show {
+    color: white !important; 
+}

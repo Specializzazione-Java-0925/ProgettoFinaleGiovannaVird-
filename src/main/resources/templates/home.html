@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{layout::head}"></head>
+<head th:replace="~{layout::head}"></head>
 <body>
-    <nav th:insert="~{layout::navbar}"></nav>
+    <nav th:replace="~{layout::navbar}"></nav>
 
     <div th:if="${param.notAuthorized}">
         <div class="alert alert-danger">Non autorizzato!</div>
@@ -36,7 +36,8 @@
         </div>
     </div>
 
-    <footer th:insert="~{layout::footer}"></footer>
-    <script th:replace="~{layout::bss}"></script>
+    <footer th:replace="~{layout::footer}"></footer>
+    <!-- <div th:replace="~{layout::bss}"></div> -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
