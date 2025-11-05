@@ -29,7 +29,7 @@ public class SecurityConfig {
         http
         .csrf(csrf->csrf.disable())
         .authorizeHttpRequests((authorize)->
-        authorize.requestMatchers("/register/**").permitAll()
+        authorize.requestMatchers("/register/**" , "/css/**", "/js/**").permitAll()
         .requestMatchers("/admin/dashboard", "/categories/create", "/categories/edit/{id}", "/categories/update/{id}", "/categories/delete/{id}").hasRole("ADMIN")
         .requestMatchers("/revisor/dashboard", "/revisor/detail/{id}" , "/accept").hasRole("REVISOR")
         .requestMatchers("/writer/dashboard", "/articles/create" , "/articles/edit/{id}", "/articles/update/{id}", "/articles/delete/{id}").hasRole("WRITER")
