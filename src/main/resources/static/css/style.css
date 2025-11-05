@@ -1,7 +1,3 @@
-nav{
- color: rgb(34, 195, 120);
+a.custom-a{
+    color: white;
 }
-
-body{background-color: red;}
-
-.text{background-color: aqua;}
