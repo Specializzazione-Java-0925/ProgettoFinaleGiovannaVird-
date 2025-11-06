@@ -16,24 +16,24 @@
 <body>
 
   <!-- navbar -->
-  <nav th:fragment="navbar" class="navbar navbar-expand-lg shadow-lg py-3 ">
+  <nav th:fragment="navbar" class="navbar navbar-expand-lg py-3 bg-black">
     <div class="container-fluid">
-      <a class="navbar-brand " th:href="@{/}">Chronicle</a>
+      <a class="navbar-brand text-white" th:href="@{/}">Chronicle</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
-            <a class="nav-link " aria-current="page" th:href="@{articles/create}">Crea un articolo</a>
+            <a class="nav-link text-white " aria-current="page" th:href="@{articles/create}">Crea un articolo</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link " aria-current="page" th:href="@{/articles}">Tutti gli articoli</a>
+            <a class="nav-link text-white" aria-current="page" th:href="@{/articles}">Tutti gli articoli</a>
           </li>
           <!-- dash admin -->
           <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="d-flex">
-              <a th:href="@{/admin/dashboard}" class="nav-link ">Dashboard admin</a>
+              <a th:href="@{/admin/dashboard}" class="nav-link text-white ">Dashboard admin</a>
               <div th:if="${careerRequest > 0}">
                 <i class=" fas fa-bell fa-1 pt-2"></i>
                 <span class="badge rounded-pill bg-danger px-1" th:text="${careerRequest}"></span>
@@ -45,7 +45,7 @@
           <!-- dash revisor -->
           <li class="nav-item" sec:authorize="hasAuthority('ROLE_REVISOR')">
             <div class="d-flex">
-              <a th:href="@{/revisor/dashboard}" class="nav-link ">Dashboard revisore</a>
+              <a th:href="@{/revisor/dashboard}" class="nav-link text-white ">Dashboard revisore</a>
               <div class="mt-1" th:if="${articlesToBeRevised > 0 }">
                 <i class="fas fa-bell fa-1 pt-2"></i>
                 <span class="badge rounded-pill bg-danger px-1" th:text="${articlesToBeRevised}"></span>
@@ -56,12 +56,12 @@
 
           <!-- dash writer -->
           <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
-            <a class="nav-link " th:href="@{/writer/dashboard}">Dashboard scrittore</a>
+            <a class="nav-link text-white " th:href="@{/writer/dashboard}">Dashboard scrittore</a>
           </li>
           <!-- end dash writer -->
          <!-- dropdown -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle " href="#" role="button"
+          <a class="nav-link dropdown-toggle  text-white" href="#" role="button"
              data-bs-toggle="dropdown" aria-expanded="false">
             Accesso
           </a>
@@ -85,7 +85,7 @@
       </ul>
 
       <div sec:authorize="isAuthenticated()"
-           th:text="|Benvenuto: ${#authentication.principal.fullname}-${#authentication.principal.authorities[0].authority.replace('ROLE_','')}|" class="me-4">
+           th:text="|Benvenuto: ${#authentication.principal.fullname}-${#authentication.principal.authorities[0].authority.replace('ROLE_','')}|" class="me-4 text-white">
       </div>
 
       <form class="d-flex" th:action="@{/articles/search}" method="get">

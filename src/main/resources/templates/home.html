@@ -2,56 +2,56 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout::head}"></head>
 <body>
-     <nav th:replace="~{layout::navbar}"></nav>
-   <main>
-    
-    
-    <div th:if="${param.notAuthorized}">
-        <div class="alert alert-danger">Non autorizzato!</div>
-    </div>
-    <div th:if="${successMessage}" class="alert alert-success">
-        <p th:text="${successMessage}"></p>
-    </div>
-    
-    <div th:if="${errorMessage}" class=" alert alert-success">
-        <p thtext="${errorMessage}"></p>
-    </div>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 mt-5" th:if="${articles.size() > 0}">
-                <h1 class="text-center" >Gli ultimi articoli</h1>
-            </div>
+    <nav th:replace="~{layout::navbar}"></nav>
+    <main>
+        
+        
+        <div th:if="${param.notAuthorized}">
+            <div class="alert alert-danger">Non autorizzato!</div>
+        </div>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
         </div>
         
-    </div>
-    
-    
-    <!-- card -->
-    <div class="container ">
-        <div class="row justify-content-center">
-
-            <div class="col-md-4 mt-5 mb-5 card-custom" th:each="article:${articles}" >
-                <div class="card mx-auto border-0" style="width: 18rem;">
-                    <img class="card-img-top shadow-lg" th:if="${article.image != null }" th:src="${article.image.path}" alt="" style="height: 200px;">
-                     <img class="card-img-top shadow-lg" th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="" style="height: 200px;">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${article.title}"></h5>
-                        <p class="card-subtitle" th:text="${article.subtitle}"></p>
-                        <p class="card-text" th:text="${article.user.username}"></p>
-                        <a class="btn btn-warning" th:href="@{/articles/details/{id}(id=${article.id})}">Leggi</a>
-                    </div>
+        <div th:if="${errorMessage}" class=" alert alert-success">
+            <p thtext="${errorMessage}"></p>
+        </div>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mt-5" th:if="${articles.size() > 0}">
+                    <h1 class="text-center text-white" >Gli ultimi articoli</h1>
                 </div>
             </div>
-
             
         </div>
-    </div>
+        
+        
+        
+        <!-- card -->
+        <div class="container  mt-5">
+            <div class="row justify-content-center">
+                <div class="col-sm-12 col-md-6 col-xl-4 " th:each="article:${articles}">
+                    <div class="card-box" >
+                        <div class="img-card-container">
+                        <img class="img-card" th:if="${article.image != null }" th:src="${article.image.path}" alt="">
+                        <img class="img-card" th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="">
+                        </div>
+                        <div class="card-body-custom">
+                            <h5 class="card-title fw-bolder mt-2 text-truncate" th:text="${article.title}"></h5>
+                            <p class="card-subtitle text-truncate" th:text="${article.subtitle}"></p>
+                            <p class="card-text text-truncate" th:text="${article.user.username}"></p>
+                            <a class="btn btn-warning mt-2" th:href="@{/articles/details/{id}(id=${article.id})}">Leggi</a>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+        </div>
+        <!-- end card -->
+        
+        
+    </main>
     
-    
-    
-   </main>
-   
     <footer th:replace="~{layout::footer}"></footer>
     <div th:replace="~{layout::bss}"></div>
     
