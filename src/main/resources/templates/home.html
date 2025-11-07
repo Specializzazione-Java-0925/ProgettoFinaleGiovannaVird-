@@ -22,8 +22,7 @@
                 <div class="col-md-12 mt-5" th:if="${articles.size() > 0}">
                     <h1 class="text-center text-white" >Gli ultimi articoli</h1>
                 </div>
-            </div>
-            
+            </div> 
         </div>
         
         
@@ -37,10 +36,10 @@
                         <img class="img-card" th:if="${article.image != null }" th:src="${article.image.path}" alt="">
                         <img class="img-card" th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="">
                         </div>
-                        <div class="card-body-custom">
-                            <h5 class="card-title fw-bolder mt-2 text-truncate" th:text="${article.title}"></h5>
-                            <p class="card-subtitle text-truncate" th:text="${article.subtitle}"></p>
-                            <p class="card-text text-truncate" th:text="${article.user.username}"></p>
+                        <div class="card-body-custom ">
+                            <h5 class="card-title text-white fw-bolder mt-2 text-truncate" th:text="${article.title}"></h5>
+                            <p class="card-subtitle text-white text-truncate" th:text="${article.subtitle}"></p>
+                            <p class="card-text text-white text-truncate" th:text="${article.user.username}"></p>
                             <a class="btn btn-warning mt-2" th:href="@{/articles/details/{id}(id=${article.id})}">Leggi</a>
                         </div>
                     </div>
