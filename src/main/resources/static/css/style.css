@@ -104,3 +104,9 @@ padding: 20px;
   font-style:oblique;
   font-size: xx-large;
 }
+
+.container-form-create{
+  background: linear-gradient(to bottom, rgba(57, 71, 137, 0.823),rgba(3, 53, 86, 0.67) ,rgba(0, 0, 0, 0.97));
+border-radius: 2px;
+box-shadow: 5px 5px 15px 20px rgba(0, 0, 0, 0.76);
+}
