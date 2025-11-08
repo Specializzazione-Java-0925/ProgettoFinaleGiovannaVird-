@@ -1,57 +1,93 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{layout::head}"></head>
+<head th:replace="~{layout::head}"></head>
 <body>
-    <nav th:insert="~{layout::navbar}"></nav>
-    
-   
-    
-    <h1 th:text="${article.title}">Titolo</h1>
-    
-    
-    <img th:if="${article.image != null}" th:src="${article.image.path}" alt="">
-    <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="">
-    
-    
-    <p th:text="${article.subtitle}">sottotitolo :</p>
-    
-    
-    <p th:if="${article.category != null}">
-        Categoria:
-        <a th:href="@{/categories/search/{id}(id=${article.category.id})}"
-        th:text="${article.category.name}"></a>
-    </p>
-    
-    <p th:unless="${article.category != null}">
-        Categoria: <em>nessuna</em>
-    </p>
-    
-    
-    <p th:text="${article.publishDate}"> data</p>
-    <a th:href="@{/search/{id}(id=${article.user.id})}"> 
-        <p th:text="${article.user.username}">nome autore :</p>
-    </a>
-    
-    
-    <p th:text="${article.body}"></p>
-    
-    <a href="#" onclick="goBack()">Torna indietro</a> 
-
-    <div>
-        <form th:action="@{/articles/accept(action='accept', articleId=${article.id})}" method="post">
-            <button type="submit" class="btn btn-primary">Accetta</button>
-        </form>
-        <form th:action="@{/articles/accept(action='reject', articleId=${article.id})}" method="post" th:object="${article}">
-            <button type="submit" class="btn btn-danger">Rifiuta</button>
-        </form>
+    <nav th:replace="~{layout::navbar}"></nav>
+    <main>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+        
+        <div class="container">
+            <div class="row">
+                <h1 th:text="${title}" class="text-center text-white mt-5 mb-5">Dettaglio dell'articolo</h1>
+                
+            </div>
+        </div>
+        <div class="container" >
+            <div class="row">
+                
+                <div class="col-lg-5 col-md-6 col-sm-12 mt-5 mb-5">
+                    
+                    <div class="polaroid-container "> 
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-center">
+                                <img th:if="${article.image != null}" th:src="${article.image.path}" alt="" class="detail-img img-fluid">
+                                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="" class="detail-img img-fluid">
+                            </div>
+                            <div class="col-12 author-signature mt-5">
+                                <a th:href="@{/search/{id}(id=${article.user.id})}" class="text-decoration-none"> 
+                                    <p th:text="${article.user.username}" class="text-white signature">nome autore :</p>
+                                </a>
+                            </div>
+                            
+                        </div>
+                    </div> 
+                    
+                </div> 
+                
+                <div class="col-lg-7 col-md-6 col-sm-12 mt-5 mb-5 px-2" >
+                    <div class="text-container-detail">
+                        <h1 th:text="${article.title}" class="text-white text-break">Titolo</h1>
+                        <p th:text="${article.subtitle}" class="text-white text-break">sottotitolo :</p>
+                        <p th:if="${article.category != null}" class="text-white">
+                            Categoria:
+                            <a th:href="@{/categories/search/{id}(id=${article.category.id})}" th:text="${article.category.name}" class="text-decoration-none badge text-bg-info" ></a>
+                        </p>
+                        <p th:unless="${article.category != null}" class="text-white">
+                            Categoria: <em>nessuna</em>
+                        </p>
+                        <p th:text="${article.publishDate}" class="text-white"> data di pubblicazione</p>
+                        <a th:href="@{/search/{id}(id=${article.user.id})}"class="text-decoration-none"> 
+                            <p th:text="${article.user.username}" class="badge text-bg-info">nome dell'autore :</p>
+                        </a>
+                        <p th:text="${article.body}" class="text-white text-break"></p>
+                       
+                        
+                        <div class="d-flex gap-3">
+                             <a href="#" onclick="goBack()" class="text-decoration-none btn btn-warning">Torna indietro</a> 
+                            <form th:action="@{/articles/accept(action='accept', articleId=${article.id})}" method="post">
+                                <button type="submit" class="btn btn-primary">Accetta</button>
+                            </form>
+                            <form th:action="@{/articles/accept(action='reject', articleId=${article.id})}" method="post" th:object="${article}">
+                                <button type="submit" class="btn btn-danger">Rifiuta</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
     </div>
     
-    <footer th:insert="~{layout::footer}"></footer>
-    <script th:insert="~{layout::bss}"></script>
-    <script>
-        function goBack(){
-            window.history.back();
-        }
-    </script>
+    
+    
+</div>
+</div>
+
+</main>
+
+<footer th:replace="~{layout::footer}"></footer>
+<script th:replace="~{layout::bss}"></script>
+<script>
+    function goBack(){
+        window.history.back();
+    }
+</script>
 </body>
 </html>
+
+
+
+

@@ -1,84 +1,109 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{layout::head}"></head>
+<head th:replace="~{layout::head}"></head>
 <body>
-    <nav th:insert="~{layout::navbar}"></nav>
-
-
+  <nav th:replace="~{layout::navbar}"></nav>
+  <main>
+    
     <div th:if="${successMessage}" class="alert alert-success">
-        <p th:text="${successMessage}"></p>
+      <p th:text="${successMessage}"></p>
     </div>
-
-    <div>Admin dashboard</div>
-
-    <div>
-        <p th:text="${title}">Richieste ricevute</p>
-    </div>
-
-    <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">Utente</th>
-      <th scope="col">Per il Ruolo</th>
-      <th scope="col">#Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr th:each="request:${requests}">
-      <!-- <th scope="row">1</th> -->
-      <td th:text="${request.id}"></td>
-      <td th:text="${request.user.username}"></td>
-      <td th:text="${request.role.name}"></td>
-      <td>
-        <!-- <a th:href="@{/operations/career/request/detail/{id}(id=$request.id)}" class="btn btn-primary"> -->
-         <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}">
-            <i class=" fa-solid fa-bars"></i>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <h2>Tutte le categorie</h2>
-      <a th:href="@{/categories/create}" class="btn btn-primary">
-        <i class="fa-solid fa-plus"></i>
-      </a>
-
-      <div class="col-12">
-        <table class=" table table-striped table-responsive-lg">
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Nome</th>
-              <th class="text-end">#Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="category : ${categories}">
-              <td th:text="${category.id}"></td>
-              <td th:text="${category.name}"></td>
-              <td class="text-end">
-                <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-warning m-2">
-                  <i class="fa-solid fa-pencil"></i>
-                </a>
-                <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger m-2">
-                  <i class="fa-solid fa-trash"></i>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    
+    <div class="container">
+      <div class="row">
+        <h1 th:text="${title}" class="text-center text-white mt-5 mb-5"></h1>
       </div>
     </div>
-  </div>
-</div>
-
-    <footer th:insert="~{layout::footer}"></footer>
-    <script th:replace="~{layout::bss}"></script>
+    
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h4 th:text="${title}" class="text-white mb-5">Richieste ricevute</h4>
+        </div>
+      </div>
+    </div>
+    
+    <!-- tab delle richieste ricevute -->
+    <div class="container bg-table">
+      <div class="row">
+        <div class="col-12 mt-3">
+          
+          <table class="table table-dark table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Utente</th>
+                <th scope="col">Per il Ruolo</th>
+                <th scope="col">#Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="request:${requests}">
+                <td th:text="${request.id}"></td>
+                <td th:text="${request.user.username}"></td>
+                <td th:text="${request.role.name}"></td>
+                <td>
+                  
+                  <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}" class="btn btn-info">
+                    <i class="bi bi-list "></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+    
+    <!-- fine tab richieste ricevute -->
+    
+    <!-- tab delle categorie -->
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-12 mt-5">
+          <h4 class="text-white mb-4">Sezione le categorie</h4>
+          <a th:href="@{/categories/create}" class="btn btn-warning">Crea una categoria
+           <i class="bi bi-plus-lg"></i>
+          </a>
+          
+          <div class="container bg-table mt-5 mb-5">
+            <div class="row">
+                <div class="col-12 mt-3">
+            <table class=" table table-dark table table-striped">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Nome</th>
+                  <th class="text-end">#Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="category : ${categories}">
+                  <td th:text="${category.id}"></td>
+                  <td th:text="${category.name}"></td>
+                  <td class="text-end">
+                    <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-warning m-2">
+                       <i class="bi bi-pen"></i>
+                    </a>
+                    <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger m-2">
+                     <i class="bi bi-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+            </div>
+             
+        
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer th:replace="~{layout::footer}"></footer>
+  <script th:replace="~{layout::bss}"></script>
 </body>
 </html>

@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{layout::head}"></head>
+<head th:replace="~{layout::head}"></head>
 <body>
-    <nav th:insert="~{layout::navbar}"></nav>
+    <nav th:replace="~{layout::navbar}"></nav>
 
-    <h1 th:text="${title}">Inserisci una categoria</h1>
+    <main class="vh-100">
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 mt-5">
+                   <h1 th:text="${title}" class="text-white">Inserisci una categoria</h1>
+                </div>
+            </div>
+        </div>
+   
 
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <form th:action="@{/categories}" method="POST" th:object="${category}">
-                    <label for="namee" class="form-label">Nome categoria</label>
+    <div class="container mt-5 mx-auto ">
+        <div class="row box-bg  p-3 m-3">
+            <div class="col-md-12 col-sm-12 p-5 ">
+               
+                    <form th:action="@{/categories}" method="POST" th:object="${category}">
+                    <label for="namee" class="form-label text-white mb-3 ">Nome categoria</label>
                     <input id="name" type="text" class="form-control" th:field="*{name}" placeholder="Inserisci il nome della categoria">
                     <p th:errors="*{name}" class="text-danger" th:if="${#fields.hasErrors('name')}"></p>
-                    <button type="submit" class="btn btn-success">Crea categoria</button>
+                    <button type="submit" class="btn btn-warning mt-3">Crea categoria</button>
                 </form>
+            
+                
             </div>
         </div>
     </div>
-
-    <footer th:insert="~{layout::footer}"></footer>
+</main>
+    <footer th:replace="~{layout::footer}"></footer>
     <script th:replace="~{layout::bss}"></script>
 </body>
 </html>

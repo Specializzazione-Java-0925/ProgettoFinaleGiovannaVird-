@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{layout::head}"></head>
+<head th:replace="~{layout::head}"></head>
 <body>
-    <nav th:insert="~{layout::navbar}"></nav>
-
-
-    <div>Richiesta</div>
-
-    <!-- <h2 th:text="${request.user.name}">Nome Utente</h2> -->
-    <p th:text="${request.user.username}">Nome Utente</p>
+    <nav th:replace="~{layout::navbar}"></nav>
     
-    <p th:text="${request.body}">Corpo</p>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                    <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="POST">
-                    <button type="submit" class="btn btn-primary">
-                        Accetta
-                    </button>
-                    <a th:href="@{/admin/dashboard}" class="bnt btn-primary">Torna indietro</a>
-                </form>
+    <main class="vh-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mt-5">
+                    <h1 class="text-white">Richiesta</h1>
+                </div>
             </div>
         </div>
-    </div>
-    
-
-    <footer th:insert="~{layout::footer}"></footer>
+        
+        
+        <div class="container box-bg mt-5">
+            <div class="row">
+                <div class="col-md-6 p-5">
+                    <h4 th:text="${request.user.username}" class="text-white">Nome Utente</h4>
+                    <p th:text="${request.body}" class="text-white">Corpo</p>
+                    
+                            <div class="col-md-6">
+                                <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="POST">
+                                    <button type="submit" class="btn btn-success m-2">
+                                       Accetta
+                                    </button>
+                                    <a th:href="@{/admin/dashboard}" class="text-decoration-none btn btn-warning ">
+                                       Torna indietro
+                                    </a>
+                                </form>
+                            </div>
+                
+                </div>
+            </div>
+        </div>
+        
+        
+    </main>
+    <footer th:replace="~{layout::footer}"></footer>
     <script th:replace="~{layout::bss}"></script>
 </body>
 </html>

@@ -106,7 +106,20 @@ padding: 20px;
 }
 
 .container-form-create{
-  background: linear-gradient(to bottom, rgba(57, 71, 137, 0.823),rgba(3, 53, 86, 0.67) ,rgba(0, 0, 0, 0.97));
+background: linear-gradient(to bottom, rgba(57, 71, 137, 0.823),rgba(3, 53, 86, 0.67) ,rgba(0, 0, 0, 0.97));
 border-radius: 2px;
 box-shadow: 5px 5px 15px 20px rgba(0, 0, 0, 0.76);
 }
+
+.bg-table{
+ background: linear-gradient(to bottom, rgba(57, 70, 137, 0.863),rgba(3, 53, 86, 0.726) ,rgba(0, 0, 0, 0.982));
+border-radius: 4px;
+box-shadow: 5px 5px 15px 20px rgba(0, 0, 0, 0.76); 
+}
+
+.box-bg{
+   background: linear-gradient(to bottom, rgba(57, 70, 137, 0.719),rgba(3, 53, 86, 0.675) ,rgba(0, 0, 0, 0.767));
+border-radius: 4px;
+box-shadow: 5px 5px 15px 20px rgba(0, 0, 0, 0.76); 
+}
+
