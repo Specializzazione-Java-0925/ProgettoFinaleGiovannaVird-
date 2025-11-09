@@ -46,6 +46,48 @@
         <p>nessun articolo presente </p>
     </div>
 
+    <!-- paginazione -->
+     <div th:if="${totalPages > 0}" class="pagination-controls mt-5">
+    <ul class="pagination justify-content-center">
+        
+        <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
+            <a th:href="@{/articles(pageNo=${currentPage - 1})}" class="page-link" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        
+        <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}" 
+            th:classappend="${i == currentPage ? 'active' : ''}">
+            <a th:href="@{/articles(pageNo=${i})}" class="page-link" th:text="${i}"></a>
+        </li>
+        
+        <li class="page-item" th:classappend="${currentPage == totalPages ? 'disabled' : ''}">
+            <a th:href="@{/articles(pageNo=${currentPage + 1})}" class="page-link" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        
+    </ul>
+    
+    <div class="text-muted text-center d-block m-0 p-2">
+        <div class=" d-flex justify-content-center ">
+            <div class="row">
+                <div class="col box-bg">
+                     <span class="text-white">Pagina</span>
+       <span th:text="${currentPage}" class="text-white"></span>
+       <span class="text-white">di</span>
+       <span th:text="${totalPages}" class="text-white"></span>
+       <span class="text-white">(</span>
+        <span th:text="${totalItems}" class="text-white"></span> 
+        <span class="text-white">articoli totali)</span>
+        </div>
+                </div>
+            </div>
+
+           
+       
+    </div>
+</div>
 
   </main>
 

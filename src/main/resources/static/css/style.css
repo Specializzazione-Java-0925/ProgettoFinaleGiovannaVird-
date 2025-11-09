@@ -86,8 +86,9 @@ padding: 20px;
 
 .detail-img{
   max-width: 90%;
-  height: auto;
+  height: 300px;
   margin-top: 45px;
+  overflow: hidden;
   box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.975) inset;
 }
 
@@ -118,8 +119,36 @@ box-shadow: 5px 5px 15px 20px rgba(0, 0, 0, 0.76);
 }
 
 .box-bg{
-   background: linear-gradient(to bottom, rgba(57, 70, 137, 0.719),rgba(3, 53, 86, 0.675) ,rgba(0, 0, 0, 0.767));
+   background: linear-gradient(to bottom, rgba(57, 70, 137, 0.434),rgba(3, 53, 86, 0.418) ,rgba(0, 0, 0, 0.555));
 border-radius: 4px;
 box-shadow: 5px 5px 15px 20px rgba(0, 0, 0, 0.76); 
 }
 
+
+.pagination .page-link {
+    color: #ffffff;             
+    background-color: #212529; 
+    border-color: #000000; 
+    box-shadow: 5px 5px 15px 20px rgba(0, 0, 0, 0.405); 
+}
+
+
+.pagination .page-link:hover {
+    color: #ffffff;
+    background-color: #343a40;
+    border-color: #010305;
+}
+
+
+.pagination .page-item.active .page-link {
+    color: #ffffff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+
+.pagination .page-item.disabled .page-link {
+    color: #adb5bd;           
+    background-color: #212529;
+    border-color: #000203;
+}

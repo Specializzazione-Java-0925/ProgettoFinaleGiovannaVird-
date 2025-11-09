@@ -21,9 +21,6 @@ import it.chronicle.demo.Services.CrudService;
 import jakarta.validation.Valid;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,56 +29,94 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-
-
-
+import org.springframework.data.domain.Page;
 
 @Controller
 @RequestMapping("/articles")
 public class ArticleController {
-   
-
+    
+    
     @Autowired
     @Qualifier("categoryService")
     private CrudService<CategoryDto, Category , Long> categoryService;
-
+    
     @Autowired
     private ArticleService articleService;
-    @Autowired
-    private ArticleRepository articleRepository;
+    // @Autowired
+    // private ArticleRepository articleRepository;
     @Autowired
     private ModelMapper modelMapper;
-
+    
     @GetMapping("/search/{id}")
     public String categorySearch(@PathVariable("id") Long id, Model viewModel) {
         CategoryDto category = categoryService.read(id);
-
+        
         viewModel.addAttribute("title", "Articoli trovati per categoria" + category.getName());
-
+        
         List<ArticleDto> articles = articleService.searchByCategory(modelMapper.map(category, Category.class));
-         List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
-
-         viewModel.addAttribute("articles", acceptedArticles);
+        List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+        
+        viewModel.addAttribute("articles", acceptedArticles);
         return "article/articles";
     }
     
-
-
-    @GetMapping
-    public String articlesIndex(Model viewModel) {
+    
+    
+    
+    @GetMapping 
+    public String articlesIndex(
+    Model viewModel,
+    
+    @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+    @RequestParam(name = "pageSize", defaultValue = "6") int pageSize) {
+        
         viewModel.addAttribute("title", "Tutti gli articoli");
-
-          List<ArticleDto> articles = new ArrayList<ArticleDto>();
-          for(Article article : articleRepository.findByIsAcceptedTrue()){
-            articles.add(modelMapper.map(article, ArticleDto.class));
-          }
-
-        Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
-        viewModel.addAttribute("articles", articles);
-
-        return "article/articles";
+        
+        
+        Page<ArticleDto> page = articleService.findPaginatedArticles(pageNo, pageSize);
+        viewModel.addAttribute("articles", page.getContent()); 
+        
+        
+        viewModel.addAttribute("currentPage", pageNo);
+        viewModel.addAttribute("totalPages", page.getTotalPages());
+        viewModel.addAttribute("totalItems", page.getTotalElements());
+        
+        
+        int totalPages = page.getTotalPages();
+        int maxPagesToShow = 5;
+        
+        int startPage = Math.max(1, pageNo - 2);
+        int endPage = Math.min(totalPages, pageNo + 2);
+        
+        if (totalPages > maxPagesToShow) {
+            if (endPage == totalPages) {
+                startPage = Math.max(1, totalPages - maxPagesToShow + 1);
+            } else if (startPage == 1) {
+                endPage = Math.min(totalPages, maxPagesToShow);
+            }
+        }
+        
+        viewModel.addAttribute("startPage", startPage);
+        viewModel.addAttribute("endPage", endPage);
+        
+        return "article/articles"; 
     }
+    
+    
+    // @GetMapping
+    // public String articlesIndex(Model viewModel) {
+    //     viewModel.addAttribute("title", "Tutti gli articoli");
+    
+    //       List<ArticleDto> articles = new ArrayList<ArticleDto>();
+    //       for(Article article : articleRepository.findByIsAcceptedTrue()){
+    //         articles.add(modelMapper.map(article, ArticleDto.class));
+    //       }
+    
+    //     Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
+    //     viewModel.addAttribute("articles", articles);
+    
+    //     return "article/articles";
+    // }
     
     
     @GetMapping("/create")
@@ -94,106 +129,106 @@ public class ArticleController {
     
     @PostMapping
     public String articleStore(@Valid @ModelAttribute("article")
-        Article article,
-        BindingResult result,
-        RedirectAttributes redirectAttributes,
-        Principal principal,
-        MultipartFile file,
-        Model viewModel){
-            if(result.hasErrors()){
-                viewModel.addAttribute("title", "Crea un articolo");
-                viewModel.addAttribute("article", article);
-                viewModel.addAttribute("categories", categoryService.readAll());
-                return "article/create";
-            }
-            articleService.create(article, principal, file);
-            redirectAttributes.addFlashAttribute("successMessage", "Articolo aggiunto con successo!");
-            return "redirect:/";
-        }
-
-
-        @GetMapping("details/{id}")
-        public String detailArticle(@PathVariable("id") Long id , Model viwModel ) {
-            viwModel.addAttribute("title", "Dettaglio articolo");
-            viwModel.addAttribute("article", articleService.read(id));
-            return "article/details";
-        }
-
-        @GetMapping("/edit/{id}")
-        public String editArticle(@PathVariable("id") Long  id, Model viewModel) {
-            viewModel.addAttribute("title", "Edita articoli");
-            viewModel.addAttribute("article", articleService.read(id));
+    Article article,
+    BindingResult result,
+    RedirectAttributes redirectAttributes,
+    Principal principal,
+    MultipartFile file,
+    Model viewModel){
+        if(result.hasErrors()){
+            viewModel.addAttribute("title", "Crea un articolo");
+            viewModel.addAttribute("article", article);
             viewModel.addAttribute("categories", categoryService.readAll());
-            return"article/edit";
+            return "article/create";
         }
+        articleService.create(article, principal, file);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo aggiunto con successo!");
+        return "redirect:/";
+    }
+    
+    
+    @GetMapping("details/{id}")
+    public String detailArticle(@PathVariable("id") Long id , Model viwModel ) {
+        viwModel.addAttribute("title", "Dettaglio articolo");
+        viwModel.addAttribute("article", articleService.read(id));
+        return "article/details";
+    }
+    
+    @GetMapping("/edit/{id}")
+    public String editArticle(@PathVariable("id") Long  id, Model viewModel) {
+        viewModel.addAttribute("title", "Edita articoli");
+        viewModel.addAttribute("article", articleService.read(id));
+        viewModel.addAttribute("categories", categoryService.readAll());
+        return"article/edit";
+    }
+    
+    
+    @PostMapping("/update/{id}")
+    public String articleUpdate(@PathVariable("id") Long id ,
+    @Valid @ModelAttribute("article") Article article,
+    BindingResult result,
+    RedirectAttributes redirectAttributes,
+    Principal principal, 
+    MultipartFile file,
+    Model viewModel) {
         
-
-        @PostMapping("/update/{id}")
-        public String articleUpdate(@PathVariable("id") Long id ,
-        @Valid @ModelAttribute("article") Article article,
-        BindingResult result,
-        RedirectAttributes redirectAttributes,
-        Principal principal, 
-        MultipartFile file,
-        Model viewModel) {
-
-           if(result.hasErrors()){
-             viewModel.addAttribute("title", "aggiornamento articolo");
+        if(result.hasErrors()){
+            viewModel.addAttribute("title", "aggiornamento articolo");
             article.setImage(articleService.read(id).getImage());
             viewModel.addAttribute("article", article);
             viewModel.addAttribute("categories",categoryService.readAll());
             return "article/edit";
-           }
-           articleService.update(id, article, file);
-           redirectAttributes.addFlashAttribute("successMessage", "Articolo modificato con successo");
-           return "redirect:/articles";
         }
-        
-        @GetMapping("/delete/{id}")
-        public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes ) {
-            articleService.delete(id);
-            redirectAttributes.addFlashAttribute("successMessage" , "Articolo eliminato con successo");
-            return "redirect:/writer/dashboard";
-        }
-        
-        
-        @GetMapping("revisor/detail/{id}")
-        public String revisorDetailArticle(@PathVariable("id") Long id, Model viewModel) {
-            viewModel.addAttribute("title", "Dettaglio articolo");
-            viewModel.addAttribute("article", articleService.read(id));
-            return "revisor/detail";
-        }
-        
-        @PostMapping("/accept")
-        public String articleSetAccepted(@RequestParam("action") String action, @RequestParam("articleId") Long articleId, RedirectAttributes redirectAttributes) {
-           if(action.equals("accept")){
-            articleService.setIsAccepted(true, articleId);
-             redirectAttributes.addFlashAttribute("resultMessage", "Articolo accettato");
-           }else if(action.equals("reject")){
-              articleService.setIsAccepted(false, articleId);
-              redirectAttributes.addFlashAttribute("resultMessage", "Articolo rifiutato");
-           }else{
-             redirectAttributes.addFlashAttribute("resultMessage", "Azione non corretta");
-           }
-
-            
-            return "redirect:/revisor/dashboard";
-        }
-
-        @GetMapping("/search")
-        public String articleSearch(@Param("keyword") String keyword, Model viewModel) {
-          viewModel.addAttribute("title","Tutti gli articoli trovati");
-
-          List<ArticleDto> articles = articleService.search(keyword);
-
-          List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
-
-          viewModel.addAttribute("articles", acceptedArticles);
-          return "article/articles";
-        }
-        
-        
-        
+        articleService.update(id, article, file);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo modificato con successo");
+        return "redirect:/articles";
     }
     
+    @GetMapping("/delete/{id}")
+    public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes ) {
+        articleService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage" , "Articolo eliminato con successo");
+        return "redirect:/writer/dashboard";
+    }
+    
+    
+    @GetMapping("revisor/detail/{id}")
+    public String revisorDetailArticle(@PathVariable("id") Long id, Model viewModel) {
+        viewModel.addAttribute("title", "Dettaglio articolo");
+        viewModel.addAttribute("article", articleService.read(id));
+        return "revisor/detail";
+    }
+    
+    @PostMapping("/accept")
+    public String articleSetAccepted(@RequestParam("action") String action, @RequestParam("articleId") Long articleId, RedirectAttributes redirectAttributes) {
+        if(action.equals("accept")){
+            articleService.setIsAccepted(true, articleId);
+            redirectAttributes.addFlashAttribute("resultMessage", "Articolo accettato");
+        }else if(action.equals("reject")){
+            articleService.setIsAccepted(false, articleId);
+            redirectAttributes.addFlashAttribute("resultMessage", "Articolo rifiutato");
+        }else{
+            redirectAttributes.addFlashAttribute("resultMessage", "Azione non corretta");
+        }
+        
+        
+        return "redirect:/revisor/dashboard";
+    }
+    
+    @GetMapping("/search")
+    public String articleSearch(@Param("keyword") String keyword, Model viewModel) {
+        viewModel.addAttribute("title","Tutti gli articoli trovati");
+        
+        List<ArticleDto> articles = articleService.search(keyword);
+        
+        List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+        
+        viewModel.addAttribute("articles", acceptedArticles);
+        return "article/articles";
+    }
+    
+    
+    
+}
+
 

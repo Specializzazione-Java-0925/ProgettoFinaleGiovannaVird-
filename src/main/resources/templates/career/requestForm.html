@@ -9,7 +9,7 @@
         <p th:text="${successMessage}"></p>
     </div>
     
-    <div class="container d-flex justify-content-center">
+    <div class="container d-flex justify-content-start mb-5">
         <div class="row">
             <div class="col mt-5">
                 <h1 th:text="${title}"class="text-white">Richiesta di collaborazione</h1>
@@ -19,7 +19,7 @@
     
 
    <div class="container">
-    <div class="row">
+    <div class="row m-1">
         <div class="col-md-6 box-bg p-4">
              <form th:action="@{/operations/career/request/save}" method="POST" th:object="${careerRequest}" enctype="multipart/form-data">
         <label for="body" class="form-label text-white">Motivo della richiesta:</label>
